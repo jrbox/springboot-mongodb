@@ -1,6 +1,6 @@
 package com.jrbox.springbootmongodb.exception;
 
-import com.jrbox.springbootmongodb.domain.BusinessError;
+import com.jrbox.springbootmongodb.domain.CommonBusinessError;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
@@ -10,29 +10,29 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public class BusinessErrorException extends RuntimeException {
     @NonNull
-    private BusinessError businessError;
+    private CommonBusinessError businessError;
     private String[] parameters;
     private HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 
-    public BusinessErrorException(BusinessError businessError, HttpStatus httpStatus) {
+    public BusinessErrorException(CommonBusinessError businessError, HttpStatus httpStatus) {
         this.setBusinessError(businessError);
         this.setHttpStatus(httpStatus);
     }
 
-    public BusinessErrorException(BusinessError businessError, String value, HttpStatus httpStatus) {
+    public BusinessErrorException(CommonBusinessError businessError, String value, HttpStatus httpStatus) {
         this(businessError, httpStatus);
         this.setParameters(new String[]{value});
     }
 
-    public BusinessErrorException(BusinessError businessError, String value) {
+    public BusinessErrorException(CommonBusinessError businessError, String value) {
         this(businessError, value, HttpStatus.BAD_REQUEST);
     }
 
-    public BusinessErrorException(BusinessError businessError, int value) {
+    public BusinessErrorException(CommonBusinessError businessError, int value) {
         this(businessError, value, HttpStatus.BAD_REQUEST);
     }
 
-    public BusinessErrorException(BusinessError businessError, int value, HttpStatus httpStatus) {
+    public BusinessErrorException(CommonBusinessError businessError, int value, HttpStatus httpStatus) {
         this(businessError, new String[]{String.valueOf(value)}, httpStatus);
     }
 }

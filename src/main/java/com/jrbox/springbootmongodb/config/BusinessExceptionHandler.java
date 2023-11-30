@@ -30,7 +30,7 @@ public class BusinessExceptionHandler {
 
     @ExceptionHandler(BusinessErrorException.class)
     public ResponseEntity<BusinessErrorMessage> handlerBusinessError(BusinessErrorException ex) {
-        var code = ex.getBusinessError().name();
+        var code = ex.getBusinessError().getCode();
         var reason = String.format(businessErrorProperties.getErrorByCode(code), ex.getParameters());
         var businessErrorMessage = BusinessErrorMessage.builder()
                 .timestamp(LocalDateTime.now())
@@ -40,6 +40,10 @@ public class BusinessExceptionHandler {
         return new ResponseEntity<>(businessErrorMessage, ex.getHttpStatus());
     }
 
+    /**
+     * Implémentation pour la Servlet Stack.
+     * @return le message d'erreur.
+     */
     protected String getInfoService() {
         String httpMethod = "?";
         String path = "?";
@@ -51,10 +55,15 @@ public class BusinessExceptionHandler {
         return String.format("[%s] [%s] [%s] - %s", this.moduleName, this.appName, httpMethod, path);
     }
 
+    /**
+     * Implémentation pour la Reactive Stack.
+     * @param serverWebExchange l'échange HTTP.
+     * @return le message d'erreur.
+     */
     protected String buildService(ServerWebExchange serverWebExchange) {
-        var appName = "appName";
         var httpMethod = serverWebExchange.getRequest().getMethod();
         var path = serverWebExchange.getRequest().getPath();
-        return String.format("[%s] [%s] - %s", appName, httpMethod.name(), path);
+        return String.format("[%s] [%s] [%s] - %s", this.moduleName, this.appName, httpMethod, path);
+
     }
 }
